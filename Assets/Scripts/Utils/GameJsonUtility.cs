@@ -7,7 +7,7 @@ using MyGame.Models;
 
 namespace MyGame.Utility
 {
-    public static class JsonUtility
+    public static class GameJsonUtility
     {
         private static string messagesFilePath = Application.persistentDataPath + "/messages.json";
 

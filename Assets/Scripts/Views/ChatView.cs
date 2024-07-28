@@ -7,7 +7,7 @@ namespace MyGame.Views
 {
     public class ChatView : MonoBehaviour
     {
-        public TMP_InputField inputField;    // 玩家输入消息的输入框
+        public InputField inputField;    // 玩家输入消息的输入框
         public Button sendButton;            // 发送消息的按钮
         public TMP_Text chatText;            // 显示聊天记录的文本组件
 
@@ -29,7 +29,8 @@ namespace MyGame.Views
         // 发送消息按钮点击事件
         private void OnSendButtonClick()
         {
-            SendMessage();
+            GSendMessage();
+
         }
 
         // 输入框回车键事件
@@ -37,27 +38,33 @@ namespace MyGame.Views
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                SendMessage();
+                GSendMessage();
             }
         }
 
         // 发送消息
-        private void SendMessage()
+        private void GSendMessage()
         {
+            print("clicked");
             string messageText = inputField.text;
             OnSendMessage?.Invoke(messageText);
             inputField.text = "";
         }
 
         // 显示消息
-        public void AddMessage(Message message)
+        public void AddMessage(MyGame.Models.Message message)
         {
-            string formattedMessage = $"{(message.IsFromPlayer ? "Player" : "NPC")}: {message.Text}";
+            string formattedMessage = $" {message.Content}";
             chatText.text += "\n" + formattedMessage;
         }
-
+        // 显示单条消息
+        public void DisplayMessage(MyGame.Models.Message message)
+        {
+            string formattedMessage = $"{message.Content}";
+            chatText.text += "\n" + formattedMessage;
+        }
         // 显示消息列表
-        public void DisplayMessages(List<Message> messages)
+        public void DisplayMessages(List<MyGame.Models.Message> messages)
         {
             chatText.text = "";
             foreach (var message in messages)

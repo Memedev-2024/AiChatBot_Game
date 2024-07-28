@@ -17,10 +17,10 @@ public class TestJsonUtility : MonoBehaviour
         };
 
         // 保存消息到 JSON 文件
-        MyGame.Utility.JsonUtility.SaveMessages(testMessages);
+        MyGame.Utility.GameJsonUtility.SaveMessages(testMessages);
 
         // 从 JSON 文件中加载消息
-        List<Message> loadedMessages = MyGame.Utility.JsonUtility.LoadMessages();
+        List<Message> loadedMessages = MyGame.Utility.GameJsonUtility.LoadMessages();
 
         // 输出加载的消息到控制台
         foreach (Message message in loadedMessages)

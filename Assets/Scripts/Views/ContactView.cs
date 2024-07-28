@@ -21,6 +21,7 @@ namespace MyGame.Views
 
             // 绑定调试按钮点击事件
             debugButton.onClick.AddListener(GenerateRandomContact);
+
         }
 
         // 随机生成联系人并显示

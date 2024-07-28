@@ -648,11 +648,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1700531100}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfc76957fd033a84391b755278b8c1b9, type: 3}
+  m_Script: {fileID: 11500000, guid: aaa2c6e769885bc4596ceda50db12d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   chatView: {fileID: 440394242}
-  npcMessageModel: {fileID: 1700531105}
 --- !u!114 &1700531105
 MonoBehaviour:
   m_ObjectHideFlags: 0
