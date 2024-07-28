@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using MyGame.Models;
 
-
 /// <summary>
 /// 测试 JSON 序列化和反序列化功能
 /// </summary>
@@ -13,10 +12,8 @@ public class TestJsonUtility : MonoBehaviour
         // 创建一个测试消息列表
         List<Message> testMessages = new List<Message>
         {
-            new Message("Player", "Hello!"),
-            new Message("NPC", "Hi there!"),
-            new Message("Player", "How are you?"),
-            new Message("NPC", "I'm good, thanks!")
+            new Message(),
+
         };
 
         // 保存消息到 JSON 文件
@@ -30,7 +27,7 @@ public class TestJsonUtility : MonoBehaviour
         {
             if (message != null)
             {
-                Debug.Log($"Sender: {message.Sender}, Content: {message.Content}");
+                Debug.Log($"Sender: {message.SenderId}, Content: {message.Content}");
             }
             else
             {
