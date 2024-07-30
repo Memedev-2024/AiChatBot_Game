@@ -45,23 +45,18 @@ namespace MyGame.Views
         // 发送消息
         private void GSendMessage()
         {
-            print("clicked");
             string messageText = inputField.text;
             OnSendMessage?.Invoke(messageText);
             inputField.text = "";
         }
 
-        // 显示消息
-        public void AddMessage(MyGame.Models.Message message)
-        {
-            string formattedMessage = $" {message.Content}";
-            chatText.text += "\n" + formattedMessage;
-        }
+
         // 显示单条消息
         public void DisplayMessage(MyGame.Models.Message message)
         {
             string formattedMessage = $"{message.Content}";
-            chatText.text += "\n" + formattedMessage;
+            string senderName = $"{message.SenderId}";
+            chatText.text += "\n" + senderName+": "+formattedMessage;
         }
         // 显示消息列表
         public void DisplayMessages(List<MyGame.Models.Message> messages)
@@ -69,7 +64,7 @@ namespace MyGame.Views
             chatText.text = "";
             foreach (var message in messages)
             {
-                AddMessage(message);
+                DisplayMessage(message);
             }
         }
     }

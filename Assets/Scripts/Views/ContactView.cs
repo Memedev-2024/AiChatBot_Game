@@ -20,7 +20,7 @@ namespace MyGame.Views
             contactPrefabs = new List<GameObject>();
 
             // 绑定调试按钮点击事件
-            debugButton.onClick.AddListener(GenerateRandomContact);
+          //  debugButton.onClick.AddListener(GenerateRandomContact);
 
         }
 

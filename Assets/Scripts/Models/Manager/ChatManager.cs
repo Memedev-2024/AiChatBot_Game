@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using MyGame.Utility;
 
 namespace MyGame.Models
 {
@@ -11,9 +12,12 @@ namespace MyGame.Models
 
         public ChatManager()
         {
-            messageDictionary = new Dictionary<int, List<Message>>();
-            messagesFilePath = Application.persistentDataPath + "/messages.json";
-            LoadMessages();
+            messageDictionary = GameJsonUtility.LoadMessages();
+            if (messageDictionary == null)
+            {
+                messageDictionary = new Dictionary<int, List<Message>>();
+                Debug.LogError("Failed to load messages, initializing new dictionary.");
+            }
         }
 
         /// <summary>
@@ -41,6 +45,9 @@ namespace MyGame.Models
 
             messageDictionary[contactId].Add(message);
             SaveMessages();
+
+            // 调试信息
+            Debug.Log($"Message added for contact ID {contactId}: {message.MessageId}, {message.Content}");
         }
 
         /// <summary>
@@ -49,7 +56,8 @@ namespace MyGame.Models
         /// <returns>新的消息 ID</returns>
         public int GenerateMessageId()
         {
-            int maxId = 0;
+            
+            int maxId = 0; // 初始化为0，从0开始生成ID
             foreach (var messages in messageDictionary.Values)
             {
                 if (messages.Count > 0)
@@ -61,7 +69,9 @@ namespace MyGame.Models
                     }
                 }
             }
+
             return maxId + 1;
+            
         }
 
         /// <summary>
@@ -69,10 +79,16 @@ namespace MyGame.Models
         /// </summary>
         private void LoadMessages()
         {
-            if (System.IO.File.Exists(messagesFilePath))
+            messageDictionary = GameJsonUtility.LoadMessages();
+
+            Debug.Log("Loaded messages:");
+            foreach (var kvp in messageDictionary)
             {
-                string json = System.IO.File.ReadAllText(messagesFilePath);
-                messageDictionary = JsonUtility.FromJson<MessageDictionaryWrapper>(json).ToDictionary();
+                Debug.Log("Contact ID: " + kvp.Key);
+                foreach (var msg in kvp.Value)
+                {
+                    Debug.Log("Message ID: " + msg.MessageId + ", Content: " + msg.Content);
+                }
             }
         }
 
@@ -81,12 +97,13 @@ namespace MyGame.Models
         /// </summary>
         private void SaveMessages()
         {
-            string json = JsonUtility.ToJson(new MessageDictionaryWrapper(messageDictionary));
-            System.IO.File.WriteAllText(messagesFilePath, json);
+            GameJsonUtility.SaveMessages(messageDictionary);
+
+
         }
 
         [System.Serializable]
-        private class MessageDictionaryWrapper
+        public class MessageDictionaryWrapper
         {
             public List<ContactMessages> contactsMessages;
 
@@ -106,7 +123,7 @@ namespace MyGame.Models
         }
 
         [System.Serializable]
-        private class ContactMessages
+        public class ContactMessages
         {
             public int contactId;
             public List<Message> messages;

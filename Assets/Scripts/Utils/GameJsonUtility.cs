@@ -1,9 +1,7 @@
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
-
 using MyGame.Models;
-
 
 namespace MyGame.Utility
 {
@@ -15,34 +13,50 @@ namespace MyGame.Utility
         /// 将消息列表保存到 JSON 文件
         /// </summary>
         /// <param name="messages">要保存的消息列表</param>
-        public static void SaveMessages(List<Message> messages)
+        public static void SaveMessages(Dictionary<int, List<Message>> messages)
         {
-            // 调试信息
             Debug.Log($"Saving messages to: {messagesFilePath}");
 
-            string json = UnityEngine.JsonUtility.ToJson(new MessageList(messages));
+            string json = JsonUtility.ToJson(new ChatManager.MessageDictionaryWrapper(messages));
+            Debug.Log($"Serialized JSON: {json}");
+
             File.WriteAllText(messagesFilePath, json);
+            Debug.Log("Messages saved successfully.");
         }
 
         /// <summary>
         /// 从 JSON 文件中加载消息列表
         /// </summary>
         /// <returns>消息列表</returns>
-        public static List<Message> LoadMessages()
+        public static Dictionary<int, List<Message>> LoadMessages()
         {
-            // 调试信息
             Debug.Log($"Loading messages from: {messagesFilePath}");
             if (File.Exists(messagesFilePath))
             {
                 string json = File.ReadAllText(messagesFilePath);
-                MessageList messageList = UnityEngine.JsonUtility.FromJson<MessageList>(json);
-                return messageList.messages;
+                Debug.Log($"Loaded JSON: {json}");
+
+                if (string.IsNullOrEmpty(json))
+                {
+                    Debug.LogWarning("Messages file is empty.");
+                    return new Dictionary<int, List<Message>>();
+                }
+
+                ChatManager.MessageDictionaryWrapper wrapper = JsonUtility.FromJson<ChatManager.MessageDictionaryWrapper>(json);
+                if (wrapper != null)
+                {
+                    return wrapper.ToDictionary();
+                }
+                else
+                {
+                    Debug.LogError("Failed to parse JSON into MessageDictionaryWrapper.");
+                }
             }
             else
             {
                 Debug.LogWarning("Messages file does not exist.");
             }
-            return new List<Message>();
+            return new Dictionary<int, List<Message>>(); // 返回一个空字典而不是 null
         }
 
         /// <summary>
@@ -58,17 +72,6 @@ namespace MyGame.Utility
             else
             {
                 Debug.LogWarning("Messages file does not exist.");
-            }
-        }
-
-        [System.Serializable]
-        private class MessageList
-        {
-            public List<Message> messages;
-
-            public MessageList(List<Message> messages)
-            {
-                this.messages = messages;
             }
         }
     }
