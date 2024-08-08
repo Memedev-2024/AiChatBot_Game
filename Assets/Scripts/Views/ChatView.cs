@@ -15,7 +15,7 @@ namespace MyGame.Views
         public event System.Action<string> OnSendMessage;
 
         // 事件用于通知控制器加载消息
-        public event System.Action<int> OnLoadMessages;
+//         public event System.Action<int> OnLoadMessages;
 
         private void Start()
         {

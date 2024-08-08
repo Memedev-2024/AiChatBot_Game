@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+ //           DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -28,20 +28,18 @@ public class UIManager : MonoBehaviour
     public void ShowContactListView()
     {
         contactListView.SetActive(true);
-        if (currentChatView != null)
-        {
-            Destroy(currentChatView); // 销毁当前的聊天页面实例
-        }
+        chatView.SetActive(false);
         GameController.Instance.SetCurrentPage(Page.ContactList);
     }
 
     public void ShowChatView()
     {
         contactListView.SetActive(false);
-        if (currentChatView == null)
-        {
-            currentChatView = Instantiate(chatPrefab); // 实例化聊天页面预制体
-        }
+        chatView.SetActive(true);
+        //if (currentChatView == null)
+        //{
+        //    currentChatView = Instantiate(chatPrefab); // 实例化聊天页面预制体
+        //}
         GameController.Instance.SetCurrentPage(Page.Chat);
     }
 }

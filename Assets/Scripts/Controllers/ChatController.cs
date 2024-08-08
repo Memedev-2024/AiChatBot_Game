@@ -11,10 +11,9 @@ public class ChatController : MonoBehaviour
 {
     public static ChatController Instance;  // 单例实例，用于全局访问
     public ChatView chatView;  // 聊天视图的引用
-    public NPCMessageModel npcMessageModel;
 
     private List<Message> messages = new List<Message>();  // 存储消息的列表
-    private int currentContactId = 2; // 当前聊天的联系人 ID
+    public int currentContactId; // 当前聊天的联系人 ID
     private int playerId = 256;
 
     private MyGame.Models.ChatManager chatManager; // 聊天管理器
@@ -26,7 +25,7 @@ public class ChatController : MonoBehaviour
     /// 
     private void Awake()
     {
-       
+        //确保在整个游戏中只有一个 ChatController 实例，并且这个实例在场景切换时不会被销毁。
         if (chatView == null)
         {
             Debug.LogError("ChatView component not found in chatPrefab.");
@@ -34,7 +33,7 @@ public class ChatController : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+ //           DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -59,14 +58,14 @@ public class ChatController : MonoBehaviour
         if (chatView != null)
         {
             chatView.OnSendMessage += GSendMessage;
-            chatView.OnLoadMessages += LoadMessages;
-            Debug.Log("OnSendMessage event subscribed");
+//            chatView.OnLoadMessages += LoadMessages;
+//            Debug.Log("OnSendMessage event subscribed");
         }
         else
         {
             Debug.LogError("ChatView instance not found.");
         }
-        npcMessageModel = GetComponent<NPCMessageModel>(); // 确保 NPCMessageModel 作为同一个 GameObject 的组件
+        //npcMessageModel = GetComponent<NPCMessageModel>(); // 确保 NPCMessageModel 作为同一个 GameObject 的组件
         LoadMessages(currentContactId);
     }
     public void GSendMessage(string playerMessage)
@@ -80,7 +79,7 @@ public class ChatController : MonoBehaviour
 
         // 获取并显示 NPC 的回复
         int npcMessageId = chatManager.GenerateMessageId();
-        string npcResponse = npcMessageModel.GetNPCMessage(npcMessageId, currentContactId, playerMessage);
+        string npcResponse =  NPCMessageModel.GetNPCMessage(npcMessageId, currentContactId, playerMessage);
         Message npcMessageObj = new Message(npcMessageId, currentContactId,npcResponse);
         messages.Add(npcMessageObj);
         chatManager.AddMessage(currentContactId, npcMessageObj);

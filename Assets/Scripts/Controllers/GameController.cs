@@ -9,14 +9,15 @@ public enum Page
 public class GameController : MonoBehaviour
 {
     public static GameController Instance; // 单例实例
-    private Page currentPage;
+    public GameUIView gameUIView;
 
+    private Page currentPage;
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+ //           DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -24,6 +25,10 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void Start() 
+    {
+        SetCurrentPage(Page.ContactList);
+    }
     public void SetCurrentPage(Page page)
     {
         currentPage = page;
@@ -34,26 +39,19 @@ public class GameController : MonoBehaviour
         return currentPage;
     }
 
-    public string OnBackButtonPressed()
+    public void OnBackButtonPressed()
     {
         if (currentPage == Page.ContactList)
         {
-            GameUIView gameUIView = FindObjectOfType<GameUIView>();
-            if (gameUIView != null)
-            {
                 gameUIView.ShowChatView(); // 从联系人列表切换到聊天页面
-                return "success";
-            }
+                SetCurrentPage(Page.Chat);
+
+            
         }
         else if (currentPage == Page.Chat)
         {
-            GameUIView gameUIView = FindObjectOfType<GameUIView>();
-            if (gameUIView != null)
-            {
                 gameUIView.ShowContactListView(); // 从聊天页面返回到联系人列表
-                return "success";
-            }
+                SetCurrentPage(Page.ContactList);
         }
-        return "failed";
     }
 }
