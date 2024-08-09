@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using UnityEngine.UI;
+using MyGame.Views;
 public enum Page
 {
     ContactList,
@@ -10,6 +11,7 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance; // 单例实例
     public GameUIView gameUIView;
+//    public ContactItemView contactItemView;
 
     private Page currentPage;
     private void Awake()
@@ -28,6 +30,7 @@ public class GameController : MonoBehaviour
     private void Start() 
     {
         SetCurrentPage(Page.ContactList);
+        ContactItemView.EnterChatUI += OnStartChat;
     }
     public void SetCurrentPage(Page page)
     {
@@ -41,17 +44,23 @@ public class GameController : MonoBehaviour
 
     public void OnBackButtonPressed()
     {
-        if (currentPage == Page.ContactList)
-        {
-                gameUIView.ShowChatView(); // 从联系人列表切换到聊天页面
-                SetCurrentPage(Page.Chat);
-
-            
-        }
-        else if (currentPage == Page.Chat)
+        if (currentPage == Page.Chat)
         {
                 gameUIView.ShowContactListView(); // 从聊天页面返回到联系人列表
                 SetCurrentPage(Page.ContactList);
         }
+
+       
+    }
+    //进入联系人
+    private void OnStartChat(int contactId)
+    {
+        Debug.Log($"Contact with ID {contactId} was selected.");
+
+        ChatController.Instance.SetCurrentContactId(contactId);
+
+        gameUIView.ShowChatView(); 
+        SetCurrentPage(Page.Chat);
+
     }
 }

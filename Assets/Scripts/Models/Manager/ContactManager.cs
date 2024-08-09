@@ -6,6 +6,7 @@ namespace MyGame.Models
 {
     public class ContactManager
     {
+
         private Dictionary<int, Contact> contactDictionary; // 存储联系人ID和联系人的字典
         private string contactsFilePath; // 存储联系人的文件路径
 
@@ -80,9 +81,13 @@ namespace MyGame.Models
                 string json = System.IO.File.ReadAllText(contactsFilePath);
                 List<Contact> contacts = JsonUtility.FromJson<ContactListWrapper>(json).contacts;
                 contactDictionary = contacts.ToDictionary(contact => contact.ID);
+
+            }
+            else
+            {
+                contactDictionary = new Dictionary<int, Contact>();
             }
         }
-
         /// <summary>
         /// 保存联系人
         /// </summary>
@@ -98,5 +103,6 @@ namespace MyGame.Models
         {
             public List<Contact> contacts;
         }
+
     }
 }

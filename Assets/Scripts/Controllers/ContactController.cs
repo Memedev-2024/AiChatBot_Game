@@ -17,7 +17,7 @@ namespace MyGame.Controllers
 
             // 订阅视图事件
             contactView.OnGenerateRandomContact += GenerateRandomContact;
-            contactView.OnRemoveContact += RemoveContact;
+            //contactView.OnRemoveContact += RemoveContact;
 
             // 加载联系人列表并显示在视图层
             LoadContacts();
@@ -28,41 +28,48 @@ namespace MyGame.Controllers
         /// </summary>
         private void LoadContacts()
         {
-            List<Contact> contacts = contactManager.GetAllContacts();
-            foreach (var contact in contacts)
+            // 从 ContactManager 获取所有联系人
+            List<Contact> allContacts = contactManager.GetAllContacts();
+
+            // 确保所有联系人都被传递给视图层
+            if (allContacts != null && allContacts.Count > 0)
             {
-                contactView.AddContact(contact.ID, contact.Name, contact.IsOnline);
+                contactView.AddContacts(allContacts);
+            }
+            else
+            {
+                Debug.Log("No contacts found to display.");
             }
         }
-
         /// <summary>
         /// 随机生成联系人并添加到视图层和管理器
         /// </summary>
         private void GenerateRandomContact()
         {
-            int id = contactManager.GenerateUniqueId();
-            string name = "Contact " + id;
-            bool isOnline = Random.Range(0, 2) == 0;
+            // 生成随机联系人
+            int newId = contactManager.GenerateUniqueId();
+            Contact newContact = new Contact(newId, "Random Name " + newId)
+            {
+                IsOnline = Random.value > 0.5f // 随机设置在线状态
+            };
 
-            // 创建新联系人
-            Contact newContact = new Contact(id, name) { IsOnline = isOnline };
-
-            // 添加到管理器
+            // 添加到模型
             contactManager.AddContact(newContact);
 
-            // 添加到视图层
+            // 更新视图
             contactView.AddContact(newContact.ID, newContact.Name, newContact.IsOnline);
         }
+    
 
         /// <summary>
         /// 删除联系人
         /// </summary>
         /// <param name="id">要删除的联系人的 ID</param>
         /// <param name="contactGO">要删除的联系人的 GameObject</param>
-        private void RemoveContact(int id, GameObject contactGO)
-        {
-            // 从管理器中删除联系人
-            contactManager.RemoveContact(id);
-        }
+        //private void RemoveContact(int id, GameObject contactGO)
+        //{
+        //    // 从管理器中删除联系人
+        //    contactManager.RemoveContact(id);
+        //}
     }
 }
