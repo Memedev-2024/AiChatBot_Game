@@ -129,24 +129,29 @@ namespace Mygame.LlmApi
         /// 获取用于认证的 URL。
         /// </summary>
         /// <returns>认证 URL 字符串</returns>
-        private static string GetAuthUrl()
-        {
-            string date = DateTime.UtcNow.ToString("r"); // 获取当前时间
-            Uri uri = new Uri(hostUrl);
-            StringBuilder builder = new StringBuilder("host: ").Append(uri.Host).Append("\n")
-                .Append("date: ").Append(date).Append("\n")
-                .Append("GET ").Append(uri.LocalPath).Append(" HTTP/1.1");
+    static string GetAuthUrl()
+            {
+                string date = DateTime.UtcNow.ToString("r");
 
-            string sha = HMACsha256(apiSecret, builder.ToString()); // 生成 HMAC-SHA256 签名
-            string authorization = $"api_key=\"{apiKey}\", algorithm=\"hmac-sha256\", headers=\"host date request-line\", signature=\"{sha}\"";
+                Uri uri = new Uri(hostUrl);
+                StringBuilder builder = new StringBuilder("host: ").Append(uri.Host).Append("\n").//
+                                        Append("date: ").Append(date).Append("\n").//
+                                        Append("GET ").Append(uri.LocalPath).Append(" HTTP/1.1");
 
-            string newUrl = $"https://{uri.Host}{uri.LocalPath}?" +
-                $"authorization={Uri.EscapeDataString(authorization)}&" +
-                $"date={Uri.EscapeDataString(date)}&" +
-                $"host={Uri.EscapeDataString(uri.Host)}";
+                string sha = HMACsha256(apiSecret, builder.ToString());
+                string authorization = string.Format("api_key=\"{0}\", algorithm=\"{1}\", headers=\"{2}\", signature=\"{3}\"", apiKey, "hmac-sha256", "host date request-line", sha);
+                //System.Web.HttpUtility.UrlEncode
 
-            return newUrl; // 返回认证 URL
-        }
+                string NewUrl = "https://" + uri.Host + uri.LocalPath;
+
+                string path1 = "authorization" + "=" + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(authorization));
+                date = date.Replace(" ", "%20").Replace(":", "%3A").Replace(",", "%2C");
+                string path2 = "date" + "=" + date;
+                string path3 = "host" + "=" + uri.Host;
+
+                NewUrl = NewUrl + "?" + path1 + "&" + path2 + "&" + path3;
+                return NewUrl;
+            }
 
         /// <summary>
         /// 使用 HMAC-SHA256 算法生成签名。
