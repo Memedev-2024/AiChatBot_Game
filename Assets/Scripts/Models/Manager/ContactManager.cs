@@ -37,8 +37,8 @@ namespace MyGame.Models
         /// <returns>找到的联系人</returns>
         public Contact GetContactById(int id)
         {
-            contactDictionary.TryGetValue(id, out Contact contact);
-            return contact;
+            contactDictionary.TryGetValue(id, out Contact name);
+            return name;
         }
 
         /// <summary>
@@ -97,7 +97,11 @@ namespace MyGame.Models
             string json = JsonUtility.ToJson(new ContactListWrapper { contacts = contacts });
             System.IO.File.WriteAllText(contactsFilePath, json);
         }
-
+        public string GetContactNameById(int contactId)
+        {
+            Contact contact = GetContactById(contactId);
+            return contact != null ? contact.Name : "Unknown";
+        }
         [System.Serializable]
         private class ContactListWrapper
         {

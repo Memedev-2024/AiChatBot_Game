@@ -1,5 +1,5 @@
 using System;
-
+using UnityEngine;
 using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Security.Cryptography;
@@ -21,14 +21,14 @@ namespace Mygame.LlmApi
         private const string xAppId = "70eef98a"; // 应用 APPID（替换为你的实际 APPID）
         private const string apiSecret = "YTdjMjY0Y2YyYjM0OGJmZDk1MjQwYWYw"; // 接口密钥（替换为你的实际 API Secret）
         private const string apiKey = "aaa1842a4cc48558d75eb993ab7eb3b0"; // 接口密钥（替换为你的实际 API Key）
-        private static string hostUrl = "http://spark-api.xf-yun.com/v3.5/chat"; // WebSocket 接口 URL
+        private static string hostUrl = "wss://spark-api.xf-yun.com/v1.1/chat"; // WebSocket 接口 URL
 
         /// <summary>
         /// 发送请求并接收响应的异步方法。
         /// </summary>
         /// <param name="messageText">发送的消息文本</param>
         /// <returns>API 响应的字符串</returns>
-        public static async Task<string> SendRequestAsync(string messageText)
+        public static async Task<string> SendRequestAsync(string messageText,string systemPrompt)
         {
             string authUrl = GetAuthUrl(); // 获取认证 URL
             string url = authUrl.Replace("http://", "ws://").Replace("https://", "wss://"); // 替换为 WebSocket URL
@@ -58,12 +58,17 @@ namespace Mygame.LlmApi
                             {
                                 text = new List<Content>
                                 {
-                                    new Content { role = "user", content = messageText } // 消息内容
+                                    new Content { role = "user", content = messageText }, // 消息内容
+ //                                   new Content { role = "system", content = "你是一只猫，你说话的时候需要在结尾加上喵" }, // 消息内容
                                 }
                             }
                         }
                     };
-
+                    //foreach (var item in request.payload.message.text)
+                    //{
+                    //    Debug.Log($"Role: {item.role}, Content: {item.content}");
+                       
+                    //};//Debug测试列表
                     string jsonString = JsonConvert.SerializeObject(request); // 将请求体序列化为 JSON 字符串
                     byte[] frameData = Encoding.UTF8.GetBytes(jsonString); // 将 JSON 字符串转换为字节数组
 

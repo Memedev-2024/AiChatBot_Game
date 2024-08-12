@@ -17,7 +17,7 @@ namespace MyGame.Controllers
 
             // 订阅视图事件
             contactView.OnGenerateRandomContact += GenerateRandomContact;
-            //contactView.OnRemoveContact += RemoveContact;
+            contactView.OnRemoveContact += RemoveContact;
 
             // 加载联系人列表并显示在视图层
             LoadContacts();
@@ -59,17 +59,13 @@ namespace MyGame.Controllers
             // 更新视图
             contactView.AddContact(newContact.ID, newContact.Name, newContact.IsOnline);
         }
-    
 
-        /// <summary>
-        /// 删除联系人
-        /// </summary>
-        /// <param name="id">要删除的联系人的 ID</param>
-        /// <param name="contactGO">要删除的联系人的 GameObject</param>
-        //private void RemoveContact(int id, GameObject contactGO)
-        //{
-        //    // 从管理器中删除联系人
-        //    contactManager.RemoveContact(id);
-        //}
+
+        private void RemoveContact(int id, GameObject contactGO)
+        {
+            // 从管理器中删除联系人
+            contactManager.RemoveContact(id);
+            // 视图层的更新已在 ContactView 中处理
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace MyGame.Utility
             if (File.Exists(messagesFilePath))
             {
                 string json = File.ReadAllText(messagesFilePath);
-                Debug.Log($"Loaded JSON: {json}");
+//                Debug.Log($"Loaded JSON: {json}");
 
                 if (string.IsNullOrEmpty(json))
                 {

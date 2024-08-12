@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log(classname+" instance found, all good.");
+ //           Debug.Log(classname+" instance found, all good.");
         }
 
 
