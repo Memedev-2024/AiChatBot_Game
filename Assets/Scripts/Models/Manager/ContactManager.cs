@@ -108,5 +108,29 @@ namespace MyGame.Models
             public List<Contact> contacts;
         }
 
+        public void UpdateContactMoodAndAffinity(int contactId, Contact.MoodType mood, int affinityChange)
+        {
+            if (contactDictionary.TryGetValue(contactId, out Contact contact))
+            {
+                contact.Mood = mood;
+
+                contact.Affinity = Mathf.Clamp(contact.Affinity + affinityChange, -5, 10);
+
+                SaveContacts();
+            }
+            else
+            {
+                Debug.LogWarning($"Contact with ID {contactId} not found.");
+            }
+        }
+        // 获取联系人的好感度
+        public int GetContactAffinity(int contactId)
+        {
+            if (contactDictionary.ContainsKey(contactId))
+            {
+                return contactDictionary[contactId].Affinity;
+            }
+            return 0;
+        }
     }
 }

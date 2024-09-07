@@ -21,7 +21,7 @@ namespace Mygame.LlmApi
         private const string xAppId = "70eef98a"; // 应用 APPID（替换为你的实际 APPID）
         private const string apiSecret = "YTdjMjY0Y2YyYjM0OGJmZDk1MjQwYWYw"; // 接口密钥（替换为你的实际 API Secret）
         private const string apiKey = "aaa1842a4cc48558d75eb993ab7eb3b0"; // 接口密钥（替换为你的实际 API Key）
-        private static string hostUrl = "wss://spark-api.xf-yun.com/v1.1/chat"; // WebSocket 接口 URL
+        private static string hostUrl = "wss://spark-api.xf-yun.com/v3.5/chat"; // WebSocket 接口 URL
 
         /// <summary>
         /// 发送请求并接收响应的异步方法。
@@ -47,7 +47,7 @@ namespace Mygame.LlmApi
                         {
                             chat = new Chat
                             {
-                                domain = "general", // 模型领域
+                                domain = "generalv3.5", // 模型领域
                                 temperature = 0.5, // 温度采样阈值
                                 max_tokens = 1024 // 最大令牌数
                             }
@@ -58,8 +58,8 @@ namespace Mygame.LlmApi
                             {
                                 text = new List<Content>
                                 {
+                                    new Content { role = "system", content = systemPrompt }, // 消息内容
                                     new Content { role = "user", content = messageText }, // 消息内容
- //                                   new Content { role = "system", content = "你是一只猫，你说话的时候需要在结尾加上喵" }, // 消息内容
                                 }
                             }
                         }

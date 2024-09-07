@@ -18,7 +18,7 @@ namespace MyGame.Utility
             Debug.Log($"Saving messages to: {messagesFilePath}");
 
             string json = JsonUtility.ToJson(new ChatManager.MessageDictionaryWrapper(messages));
-            Debug.Log($"Serialized JSON: {json}");
+  //          Debug.Log($"Serialized JSON: {json}");
 
             File.WriteAllText(messagesFilePath, json);
             Debug.Log("Messages saved successfully.");

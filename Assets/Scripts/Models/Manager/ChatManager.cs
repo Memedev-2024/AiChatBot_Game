@@ -128,5 +128,21 @@ namespace MyGame.Models
             public int contactId;
             public List<Message> messages;
         }
+
+        public void RemoveMessagesByContactId(int contactId)
+        {
+            if (messageDictionary.ContainsKey(contactId))
+            {
+                // 移除指定联系人的所有消息
+                messageDictionary.Remove(contactId);
+                SaveMessages(); // 保存更新后的消息到文件
+
+                Debug.Log($"All messages for contact ID {contactId} have been removed.");
+            }
+            else
+            {
+                Debug.LogWarning($"No messages found for contact ID {contactId} to remove.");
+            }
+        }
     }
 }

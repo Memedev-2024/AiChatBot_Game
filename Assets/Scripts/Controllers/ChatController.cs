@@ -17,7 +17,7 @@ public class ChatController : MonoBehaviour
     public int currentContactId; // 当前聊天的联系人 ID
     private int playerId = 256;
 
-    private MyGame.Models.ChatManager chatManager; // 聊天管理器
+    public MyGame.Models.ChatManager chatManager; // 聊天管理器
     private MyGame.Models.ContactManager contactManager; // 联系人管理器
     /// <summary>
     /// 发送玩家消息并获取 NPC 的回复
@@ -55,8 +55,6 @@ public class ChatController : MonoBehaviour
         if (chatView != null)
         {
             chatView.OnSendMessage += GTrySendMessage;
-//            chatView.OnLoadMessages += LoadMessages;
-//            Debug.Log("OnSendMessage event subscribed");
         }
         else
         {
@@ -83,15 +81,25 @@ public class ChatController : MonoBehaviour
 
         // 获取并显示 NPC 的回复
         int npcMessageId = chatManager.GenerateMessageId();
-        string npcResponse = await NPCMessageModel.GetNPCMessage(npcMessageId, currentContactId, playerMessage);
+        // 调用方法并解析返回的消息细节
+        var (npcResponse, shouldReply, mood, approval) = await NPCMessageModel.GetNPCMessage(npcMessageId, currentContactId, playerMessage);
 
         // 停止显示打字状态
         chatView.UpdateTypingStatus(false);
-        Message npcMessageObj = new Message(npcMessageId, currentContactId, npcResponse);
-        messages.Add(npcMessageObj);
-        chatManager.AddMessage(currentContactId, npcMessageObj);
-        chatView.DisplayMessage(npcMessageObj);
-
+        if (shouldReply)
+        {
+            Message npcMessageObj = new Message(npcMessageId, currentContactId, npcResponse);
+            messages.Add(npcMessageObj);
+            chatManager.AddMessage(currentContactId, npcMessageObj);
+            chatView.DisplayMessage(npcMessageObj);
+        }
+        else
+        {
+            Debug.Log("Ta看到了消息，但不想理你");
+        }
+        // 更新联系人的心情和好感度
+        contactManager.UpdateContactMoodAndAffinity(currentContactId, mood, approval);
+        chatView.UpdateAffinitySlider(contactManager.GetContactAffinity(currentContactId));
     }
 
 

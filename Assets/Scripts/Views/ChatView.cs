@@ -17,6 +17,7 @@ namespace MyGame.Views
 
         public Text contactNameText; // 显示联系人姓名的文本框
         public Text typingStatusText; // 显示打字状态的文本框
+        public Slider affinitySlider; // 用于显示好感度的滑块
 
         private List<GameObject> chatPrefabs; // 存储生成的消息小预构体
         private CancellationTokenSource typingCancellationTokenSource;
@@ -106,7 +107,6 @@ namespace MyGame.Views
 
         public async void UpdateTypingStatus(bool isTyping)
         {
-            Debug.Log($"UpdateTypingStatus called with isTyping: {isTyping}");
 
             // 取消当前正在运行的打字状态任务
             if (typingCancellationTokenSource != null)
@@ -148,10 +148,16 @@ namespace MyGame.Views
             catch (TaskCanceledException)
             {
                 // 如果任务被取消，不需要做任何事情
-                Debug.Log("Typing status update canceled");
             }
         }
-    
+        public void UpdateAffinitySlider(int affinity)
+        {
+            if (affinitySlider != null)
+            {
+                affinitySlider.value = affinity;  // 设置滑块的值为当前好感度
+            }
+        }
+
     }
     
 }

@@ -3,18 +3,21 @@ using UnityEngine;
 using MyGame.Models;
 using MyGame.Views;
 
+
 namespace MyGame.Controllers
 {
     public class ContactController : MonoBehaviour
     {
-        public ContactView contactView; // 联系人视图的引用
-        private ContactManager contactManager; // 联系人管理器
+        public ChatManager chatManager;
+        public ContactView contactView; 
+        private ContactManager contactManager;
 
         private void Start()
         {
             // 初始化联系人管理器
             contactManager = new ContactManager();
-
+            // 获取 ChatManager 实例
+            chatManager = ChatController.Instance?.chatManager; // 通过单例获取
             // 订阅视图事件
             contactView.OnGenerateRandomContact += GenerateRandomContact;
             contactView.OnRemoveContact += RemoveContact;
@@ -65,6 +68,7 @@ namespace MyGame.Controllers
         {
             // 从管理器中删除联系人
             contactManager.RemoveContact(id);
+            chatManager.RemoveMessagesByContactId(id);
             // 视图层的更新已在 ContactView 中处理
         }
     }
