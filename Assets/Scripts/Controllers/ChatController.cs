@@ -82,8 +82,7 @@ public class ChatController : MonoBehaviour
         // 获取并显示 NPC 的回复
         int npcMessageId = chatManager.GenerateMessageId();
         // 调用方法并解析返回的消息细节
-        var (npcResponse, shouldReply, mood, approval) = await NPCMessageModel.GetNPCMessage(npcMessageId, currentContactId, playerMessage);
-
+        var (npcResponse, shouldReply, mood, approval) = await NPCMessageGenerator.GetNPCMessage(npcMessageId, currentContactId, playerMessage, contactManager);
         // 停止显示打字状态
         chatView.UpdateTypingStatus(false);
         if (shouldReply)

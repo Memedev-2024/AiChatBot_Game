@@ -47,7 +47,7 @@ namespace MyGame.Models
             SaveMessages();
 
             // µ÷ÊÔÐÅÏ¢
-            Debug.Log($"Message added for contact ID {contactId}: {message.MessageId}, {message.Content}");
+ //           Debug.Log($"Message added for contact ID {contactId}: {message.MessageId}, {message.Content}");
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace MyGame.Models
             }
             else
             {
-                Debug.LogWarning($"No messages found for contact ID {contactId} to remove.");
+ //               Debug.LogWarning($"No messages found for contact ID {contactId} to remove.");
             }
         }
     }

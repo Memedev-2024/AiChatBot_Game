@@ -5,9 +5,12 @@ namespace MyGame.Models
     [System.Serializable]
     public class Contact
     {
-        public int ID;              // 联系人的唯一标识符
-        public string Name;         // 联系人的名字
-        public bool IsOnline;       // 联系人是否在线
+        public int ID;             
+        public string Name;
+        public string Biography; // 个人简介
+        public string Background; // 个人背景
+
+        public bool IsOnline;      
         public MoodType Mood;       // 联系人的心情
         public int Affinity;        // 联系人的好感度 (范围 -5至10)
 

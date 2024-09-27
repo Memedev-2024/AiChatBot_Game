@@ -15,13 +15,13 @@ namespace MyGame.Utility
         /// <param name="messages">要保存的消息列表</param>
         public static void SaveMessages(Dictionary<int, List<Message>> messages)
         {
-            Debug.Log($"Saving messages to: {messagesFilePath}");
+ //           Debug.Log($"Saving messages to: {messagesFilePath}");
 
             string json = JsonUtility.ToJson(new ChatManager.MessageDictionaryWrapper(messages));
   //          Debug.Log($"Serialized JSON: {json}");
 
             File.WriteAllText(messagesFilePath, json);
-            Debug.Log("Messages saved successfully.");
+ //           Debug.Log("Messages saved successfully.");
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using MyGame.Models;
 using MyGame.Views;
 
 
+
 namespace MyGame.Controllers
 {
     public class ContactController : MonoBehaviour
@@ -47,13 +48,22 @@ namespace MyGame.Controllers
         /// <summary>
         /// 随机生成联系人并添加到视图层和管理器
         /// </summary>
-        private void GenerateRandomContact()
+        private  async void GenerateRandomContact()
         {
             // 生成随机联系人
             int newId = contactManager.GenerateUniqueId();
-            Contact newContact = new Contact(newId, "Random Name " + newId)
+
+            // 使用 AI 生成名字和个人资料（直接调用静态方法）
+            (var name, var biography,var background) = await NPCBiographyGenerator.GenerateNPCBiographyAsync();
+            
+            Contact newContact = new Contact(newId, name)
             {
-                IsOnline = Random.value > 0.5f // 随机设置在线状态
+                Background = background,
+                Biography = biography, // 生成的简介
+                IsOnline = Random.value > 0.5f, // 随机设置在线状态
+                Mood = Contact.MoodType.Bored,
+                Affinity = 0,
+
             };
 
             // 添加到模型
@@ -66,10 +76,8 @@ namespace MyGame.Controllers
 
         private void RemoveContact(int id, GameObject contactGO)
         {
-            // 从管理器中删除联系人
             contactManager.RemoveContact(id);
             chatManager.RemoveMessagesByContactId(id);
-            // 视图层的更新已在 ContactView 中处理
         }
     }
 }
